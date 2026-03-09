@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Listado de Ejercicios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --color-fondo: #020617;
+      --color-secundario: #020617;
+      --color-tarjeta: #0b1120;
+      --color-acento: #22c55e;
+      --color-texto: #e5e7eb;
+      --color-texto-suave: #9ca3af;
+      --borde-tarjeta: rgba(148, 163, 184, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--color-texto);
+      min-height: 100vh;
+    }
+
+    /* MENÚ SUPERIOR */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9));
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.8);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-titulo {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .nav-titulo h1 {
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-texto);
+    }
+
+    .nav-titulo span {
+      font-size: 0.75rem;
+      color: var(--color-texto-suave);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--color-texto-suave);
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.18s ease-out;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-acento);
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .nav-links a.principal {
+      background: var(--color-acento);
+      color: #022c22;
+      border-color: transparent;
+      font-weight: 600;
+      box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.4), 0 12px 40px rgba(34, 197, 94, 0.5);
+    }
+
+    .nav-links a.principal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.65), 0 18px 55px rgba(22, 163, 74, 0.85);
+    }
+
+    .nav-links a.principal::before {
+      content: "🏋️";
+    }
+
+    .nav-links a.secundario::before {
+      content: "📋";
+    }  
+
+    .buscador {
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-width: 420px;
+    }
+
+    .buscador label {
+    font-size: 0.8rem;
+    color: var(--color-texto-suave);
+    }
+
+    .buscador input {
+    padding: 0.55rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--color-texto);
+    font-size: 0.9rem;
+    outline: none;
+    }
+
+    .buscador input:focus {
+    border-color: rgba(34, 197, 94, 0.9);
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
+    }
+
+
+    /* CONTENIDO PRINCIPAL */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.75rem 1rem 3rem;
+    }
+
+    .intro {
+      margin-bottom: 1.5rem;
+    }
+
+    .intro h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.35rem;
+      color: var(--color-texto);
+    }
+
+    .intro p {
+      font-size: 0.9rem;
+      color: var(--color-texto-suave);
+      max-width: 650px;
+    }
+
+    .separador {
+      height: 1px;
+      background: radial-gradient(circle, rgba(148, 163, 184, 0.75), transparent 70%);
+      border-radius: 999px;
+      margin: 1.25rem 0 1.5rem;
+      opacity: 0.9;
+    }
+
+    /* LISTA DE EJERCICIOS */
+    .lista-ejercicios {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .grupo-titulo {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-texto-suave);
+      margin-top: 0.5rem;
+      margin-bottom: 0.35rem;
+      padding-left: 0.15rem;
+    }
+
+    .tarjeta-ejercicio {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617 55%);
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid var(--borde-tarjeta);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 0.85rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 720px) {
+      .tarjeta-ejercicio {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tarjeta-ejercicio::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.12), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .tarjeta-contenido,
+    .tarjeta-media {
+      position: relative;
+      z-index: 1;
+    }
+
+    .etiqueta-musculo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-texto-suave);
+      margin-bottom: 0.4rem;
+    }
+
+    .etiqueta-musculo::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--color-acento);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.28);
+    }
+
+    .nombre-ejercicio {
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-texto);
+    }
+
+    .meta-ejercicio {
+      font-size: 0.8rem;
+      color: var(--color-texto-suave);
+      margin-bottom: 0.5rem;
+    }
+
+    .descripcion {
+      font-size: 0.88rem;
+      color: var(--color-texto-suave);
+      margin-bottom: 0.65rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.15rem;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--color-texto-suave);
+    }
+
+    .chip-acento {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: var(--color-acento);
+      background: rgba(21, 128, 61, 0.18);
+    }
+
+    .tarjeta-media {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .media {
+      border-radius: 0.7rem;
+      overflow: hidden;
+      border: 1px solid var(--borde-tarjeta);
+      background: #000;
+    }
+
+    .media img {
+      width: 100%;
+      display: block;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .media-caption {
+      padding: 0.4rem 0.55rem;
+      font-size: 0.72rem;
+      color: var(--color-texto-suave);
+      background: radial-gradient(circle at top, #020617, #020617);
+    }
+
+    .id-ejercicio {
+      position: absolute;
+      right: 0.85rem;
+      top: 0.8rem;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      color: var(--color-texto-suave);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+    }
+
+
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      font-size: 0.78rem;
+      color: var(--color-texto-suave);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- MENÚ / NAVEGACIÓN -->
+  <header>
+    <nav class="nav">
+      <div class="nav-titulo">
+        <h1>Lista de ejercicios</h1>
+      </div>
+      <div class="nav-links">
+        <!-- Enlace a la página anterior de planificación -->
+        <a href="index.html" class="principal">Ir al plan de entreno</a>
+        <!-- Enlace interno (top de la lista) por si luego amplías -->
+        <a href="EjerciciosAnder.html" class="secundario">Ver lista</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Catálogo de ejercicios</h2>
+      <p>
+        Añade aquí todos los ejercicios que sueles usar: nombre, imagen de referencia y una descripción clara de técnica.
+      </p>
+    </section>
+
+    <div class="separador"></div>
+    <section class="buscador">
+    <label for="buscador-ejercicios">Buscar ejercicio por nombre</label>
+    <input
+        type="text"
+        id="buscador-ejercicios"
+        placeholder="Busqueda de ejercicios"
+    />
+    </section>
+    <!-- LISTA DE EJERCICIOS -->
+    <section id="lista-ejercicios" class="lista-ejercicios">
+      <p class="grupo-titulo">Rehabilitación</p>
+
+      <!-- EJERCICIO 1 -->
+      <article class="tarjeta-ejercicio">
+
+        <div class="tarjeta-contenido">
+          <div class="etiqueta-musculo"> Lumbar</div>
+          <h3 class="nombre-ejercicio">Postura de Esfinge</h3>
+          <p class="meta-ejercicio">
+           Es un ejercicio para reducir el dolor Lumbar.
+          </p>
+          <p class="descripcion">
+            Se hace tumbado boca abajo, con los codos apoyados en el suelo a la altura de los hombros. Desde esta posición, se eleva el torso manteniendo las caderas y piernas en contacto con el suelo, creando una ligera extensión en la zona lumbar. Es importante mantener una respiración controlada y evitar forzar la extensión para no generar molestias.
+          </p>
+          <div class="chips">
+            <a class="chip chip-acento" href="https://www.youtube.com/watch?v=by_gvo1FCdQ" target="_blank">Vídeo de referencia</a>
+          </div>
+        </div>
+
+        <div class="tarjeta-media">
+          <!-- Imagen del ejercicio -->
+          <div class="media">
+            <!-- Sustituye esta URL por tu propia imagen o ruta local -->
+            <img src="https://www.martinvasco.es/wp-content/uploads/2019/04/metodo-mckenzie-terapia-manual-en-Talavera-11.jpg"
+                 alt="Ejemplo de press banca con barra en gimnasio" />
+            <div class="media-caption">
+              Imagen de referencia de la postura de Esfinge de McKenzie.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- EJERCICIO 2 -->
+      <article class="tarjeta-ejercicio">
+
+        <div class="tarjeta-contenido">
+          <div class="etiqueta-musculo">Lumbar</div>
+          <h3 class="nombre-ejercicio">Plancha lateral modificada</h3>
+          <p class="meta-ejercicio">
+            Para fortalecer el core sin generar presión en la zona lumbar, ideal para personas con dolor de espalda.
+          </p>
+          <p class="descripcion">
+            Se hace tumbado de lado, apoyando el antebrazo en el suelo y manteniendo las rodillas flexionadas. Desde esta posición, se eleva ligeramente la cadera del suelo, manteniendo una línea recta desde los hombros hasta las rodillas. Es importante no forzar el levantamiento y mantener una respiración controlada durante el ejercicio.
+          </p>
+          <div class="chips">
+            <a class="chip chip-acento" href="https://www.youtube.com/watch?v=I_drRVYlHbc" target="_blank">Vídeo de referencia</a>
+          </div>
+        </div>
+
+        <div class="tarjeta-media">
+          <div class="media">
+            <img src="https://www.sportlife.es/uploads/static/sportlife/upload/images/gallery/5b435d5b0ee694866d349ea7/5ee9db860ee694bd123493cc-que-mania-con-la-plancha-lateral.jpg"
+                 alt="Plancha lateral modificada" />
+            <div class="media-caption">
+              Imagen de referencia de la Plancha lateral modificada.
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- EJERCICIO 3 -->
+      <article class="tarjeta-ejercicio">
+
+        <div class="tarjeta-contenido">
+          <div class="etiqueta-musculo">Lumbar</div>
+          <h3 class="nombre-ejercicio">Curl de McGill</h3>
+          <p class="meta-ejercicio">
+            Para fortalecer el core sin generar presión en la zona lumbar, ideal para personas con dolor de espalda.
+          </p>
+          <p class="descripcion">
+            Se hace tumbado boca arriba, con una pierna flexionada y el pie apoyado en el suelo, mientras la otra pierna permanece estirada. Se colocan las manos detrás de la espalda. Desde esta posición, se eleva ligeramente la cabeza y los hombros del suelo, manteniendo la espalda baja en contacto con el suelo. Es importante no forzar el movimiento y mantener una respiración controlada durante el ejercicio.
+          </p>
+          <div class="chips">
+            <a class="chip chip-acento" href="https://www.youtube.com/watch?v=I_drRVYlHbc" target="_blank">Vídeo de referencia</a>
+          </div>
+        </div>
+
+        <div class="tarjeta-media">
+          <div class="media">
+            <img src="https://www.sportlife.es/uploads/s1/76/25/34/4/article-abdominales-seguros-eficientes-curl-mcgill-5762c9ade3032.jpeg"
+                 alt="Curl de McGill" />
+            <div class="media-caption">
+              Imagen de referencia del Curl Up de McGill.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- EJERCICIO 4 -->
+      <article class="tarjeta-ejercicio">
+
+        <div class="tarjeta-contenido">
+          <div class="etiqueta-musculo">Lumbar</div>
+          <h3 class="nombre-ejercicio">Bird Dog</h3>
+          <p class="meta-ejercicio">
+            Para fortalecer el core, la espalda baja, la postura, el equilibrio y la estabilidad lumbopelvica, ideal para personas con dolor de espalda.
+          </p>
+          <p class="descripcion">
+            Se hace en cuclillas con las manos apoyadas en el suelo, manteniendo la espalda recta. Mientras se levanta una pierna hacia atrás, se levanta el brazo opuesto hacia adelante, manteniendo el equilibrio. Es importante no forzar el movimiento y mantener una respiración controlada durante el ejercicio.
+          </p>
+          <div class="chips">
+            <a class="chip chip-acento" href="https://www.youtube.com/watch?v=cqe97lhKVP4" target="_blank">Vídeo de referencia</a>
+          </div>
+        </div>
+
+        <div class="tarjeta-media">
+          <div class="media">
+            <img src="https://mejorconsalud.as.com/wp-content/uploads/2021/02/bird-dog.jpg"
+                 alt="Bird Dog" />
+            <div class="media-caption">
+              Imagen de referencia del Bird Dog.
+            </div>
+          </div>
+        </div>
+      </article>
+      
+      <!-- AÑADE MÁS ARTÍCULOS SIGUIENDO ESTE MISMO PATRÓN -->
+    </section>
+  </main>
+
+  <footer>
+    Página de catálogo de ejercicios · Hecha por el conejito de la suerte 🐇🍀.
+  </footer>
+  <script>
+  const inputBuscador = document.getElementById('buscador-ejercicios');
+  const tarjetas = document.querySelectorAll('.tarjeta-ejercicio');
+
+  inputBuscador.addEventListener('input', function () {
+    const texto = this.value.toLowerCase().trim();
+
+    tarjetas.forEach(tarjeta => {
+      const nombre = tarjeta
+        .querySelector('.nombre-ejercicio')
+        .textContent.toLowerCase();
+
+      if (nombre.includes(texto)) {
+        tarjeta.style.display = '';
+      } else {
+        tarjeta.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
